@@ -1340,6 +1340,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function showList($ajax = false, $state_info = null)
 	{
 		$data = $this->get_common_data();
+        $data->unic_id = $this->unic_id;
 		
 		$data->order_by 	= $this->order_by;
 		
@@ -1477,6 +1478,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		
 		$data 				= $this->get_common_data();
 		$data->types 		= $this->get_field_types();
+        $data->unic_id      = $this->unic_id;
 		
 		$data->list_url 		= $this->getListUrl();
 		$data->insert_url		= $this->getInsertUrl();
@@ -1497,6 +1499,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		
 		$data 				= $this->get_common_data();
 		$data->types 		= $this->get_field_types();
+        $data->unic_id      = $this->unic_id;
 		
 		$data->field_values = $this->get_edit_values($state_info->primary_key);
 		
@@ -2387,7 +2390,12 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 		if($primary_key === null)
 			return $this->state_url('edit');
 		else
-			return $this->state_url('edit/'.$primary_key);
+        {
+            if(!empty($this->unic_id))
+                return $this->state_url('edit/'.$primary_key.'/'.$this->unic_id);
+            else
+                return $this->state_url('edit/'.$primary_key);
+        }
 	}
 	
 	protected function getUpdateUrl($state_info)
@@ -2675,6 +2683,8 @@ class grocery_CRUD extends grocery_CRUD_States
 	protected $default_texteditor_path 				= 'assets/grocery_crud/texteditor';
 	protected $default_theme_path					= 'assets/grocery_crud/themes';
 	protected $default_language_path				= 'assets/grocery_crud/languages';
+
+    protected $unic_id;
 	
 	/**
 	 * 
@@ -2682,9 +2692,10 @@ class grocery_CRUD extends grocery_CRUD_States
 	 * 
 	 * @access	public
 	 */
-	public function __construct()
+	public function __construct($id = NULL)
 	{
-
+        if(!empty($id))
+            $this->unic_id = $id;
 	}	
 	
 	/**
